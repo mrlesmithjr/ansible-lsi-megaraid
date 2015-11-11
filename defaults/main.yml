@@ -13,3 +13,4 @@ megacli_config_logic_device:
       - 3
 megacli_create_logic_devices: false  #defines if script should be executed in order to create logic_device(s) defined
 megacli_path: /opt/MegaRAID/MegaCli
+megacli_reboot_after_creation: false #defines if nodes should be rebooted after creation of logic devices

@@ -58,13 +58,14 @@
      - scsitools
   when: ansible_os_family == "Debian"
 
-- name: checking for scsi devices
-  shell: sg_scan
-  register: scsi_devices
-  changed_when: False
-  when: ansible_os_family == "Debian"
+- name: restarting machine
+  command: shutdown -r now "rebooting to complete logic device creation"
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: (megacli_reboot_after_creation is defined and megacli_reboot_after_creation) and lsi_logic_devices_created.changed
 
-- name: rescanning for new disks added
-  command: /sbin/rescan-scsi-bus
-  changed_when: False
-  when: scsi_devices.stdout != ""
+- name: waiting for server to come back
+  local_action: wait_for port=22 host="{{ ansible_ssh_host  | default(inventory_hostname) }}" search_regex=OpenSSH delay=10
+  sudo: false
+  when: (megacli_reboot_after_creation is defined and megacli_reboot_after_creation) and lsi_logic_devices_created.changed
