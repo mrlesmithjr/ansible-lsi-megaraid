@@ -22,7 +22,7 @@
     src: lsi_create_ld.sh.j2
     dest: "{{ megacli_path }}/lsi_create_ld.sh"
     owner: root
-    group: Root
+    group: root
     mode: 0774
 
 - name: checking if logic devices have already been configured
