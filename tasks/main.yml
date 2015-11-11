@@ -1,0 +1,18 @@
+---
+# tasks file for ansible-lsi-megaraid
+- name: copying MegaRaid Files
+  copy:
+    src: Linux/opt/MegaRAID
+    dest: /opt/MegaRAID
+    owner: root
+    group: root
+    mode: 0774
+  when: ansible_os_family == "Debian"
+
+- name: creating lsi script
+  template:
+    src: lsi.sh.j2
+    dest: /usr/local/sbin/lsi.sh
+    owner: root
+    group: root
+    mode: 0774

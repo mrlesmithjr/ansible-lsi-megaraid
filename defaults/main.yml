@@ -1,0 +1,4 @@
+---
+# defaults file for ansible-lsi-megaraid
+megacli_bin: MegaCli64
+megacli_path: /opt/MegaRAID/MegaCli/
