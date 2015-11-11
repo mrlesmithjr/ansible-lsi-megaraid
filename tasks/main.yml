@@ -16,3 +16,54 @@
     owner: root
     group: root
     mode: 0774
+
+- name: generating logic device creation script
+  template:
+    src: lsi_create_ld.sh.j2
+    dest: "{{ megacli_path }}/lsi_create_ld.sh"
+    owner: root
+    group: Root
+    mode: 0774
+
+- name: checking if logic devices have already been configured
+  stat:
+    path: /etc/lsi_logic_devices_created.donotremove
+  register: lsi_logic_devices_already_created
+
+- name: creating logic devices
+  shell: "{{ megacli_path }}/lsi_create_ld.sh"
+  register: lsi_logic_devices_created
+  when: not lsi_logic_devices_already_created.stat.exists and (megacli_create_logic_devices is defined and megacli_create_logic_devices)
+
+- name: marking logic devices as created
+  file:
+    dest: /etc/lsi_logic_devices_created.donotremove
+    owner: root
+    group: root
+    mode: 0600
+    state: touch
+  when: not lsi_logic_devices_already_created.stat.exists and (megacli_create_logic_devices is defined and megacli_create_logic_devices)
+
+- name: adding notes to mark file
+  lineinfile:
+    line: "DO NOT DELETE THIS FILE!!!! Important"
+  when: not lsi_logic_devices_already_created.stat.exists and (megacli_create_logic_devices is defined and megacli_create_logic_devices)
+
+- name: installing pre-reqs
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+     - scsitools
+  when: ansible_os_family == "Debian"
+
+- name: checking for scsi devices
+  shell: sg_scan
+  register: scsi_devices
+  changed_when: False
+  when: ansible_os_family == "Debian"
+
+- name: rescanning for new disks added
+  command: /sbin/rescan-scsi-bus
+  changed_when: False
+  when: scsi_devices.stdout != ""
