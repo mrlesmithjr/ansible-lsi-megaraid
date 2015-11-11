@@ -3,7 +3,7 @@
 - name: copying MegaRaid Files
   copy:
     src: Linux/opt/MegaRAID
-    dest: /opt/MegaRAID
+    dest: /opt
     owner: root
     group: root
     mode: 0774
