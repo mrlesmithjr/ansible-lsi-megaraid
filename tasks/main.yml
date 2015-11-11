@@ -46,6 +46,7 @@
 
 - name: adding notes to mark file
   lineinfile:
+    dest: /etc/lsi_logic_devices_created.donotremove
     line: "DO NOT DELETE THIS FILE!!!! Important"
   when: not lsi_logic_devices_already_created.stat.exists and (megacli_create_logic_devices is defined and megacli_create_logic_devices)
 
