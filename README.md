@@ -1,31 +1,87 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Manage LSI Controller logic devices. Ability to create new logic devices.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Identify controller(s), enclosure id(s) and slot(s) to configure. Host(s) require a reboot in order to discover newly created logic devices.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+````
+---
+# defaults file for ansible-lsi-megaraid
+megacli_bin: MegaCli64
+megacli_config_logic_device:
+  - name: ld0  #Bogus name for creating additional logic_devices
+    controller: 0  #Should usually be 0 unless more than one controller exists.
+    enclosure_id: 252  #enclosure id of enclose attached to controller
+    raid_level: 5  #defines the raid-level to create...0,1,5,6,etc.
+    slots:  #defines the slot(s) to use for creating the logic_deivce.
+      - 0
+      - 1
+      - 2
+      - 3
+megacli_create_logic_devices: false  #defines if script should be executed in order to create logic_device(s) defined
+megacli_path: /opt/MegaRAID/MegaCli
+megacli_reboot_after_creation: false #defines if nodes should be rebooted after creation of logic devices
+````
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
+      vars:
+        - install_lsi_megaraid_utils: true
+        - megacli_config_logic_device:
+            - name: ld1  #Bogus name for creating additional logic_devices
+              controller: 0  #Should usually be 0 unless more than one controller exists.
+              enclosure_id: 252  #enclosure id of enclose attached to controller
+              raid_level: 0  #defines the raid-level to create...0,1,5,6,etc.
+              slots:  #defines the slot(s) to use for creating the logic_deivce.
+                - 3
+            - name: ld2  #Bogus name for creating additional logic_devices
+              controller: 0  #Should usually be 0 unless more than one controller exists.
+              enclosure_id: 252  #enclosure id of enclose attached to controller
+              raid_level: 0  #defines the raid-level to create...0,1,5,6,etc.
+              slots:  #defines the slot(s) to use for creating the logic_deivce.
+                - 4
+            - name: ld3  #Bogus name for creating additional logic_devices
+              controller: 0  #Should usually be 0 unless more than one controller exists.
+              enclosure_id: 252  #enclosure id of enclose attached to controller
+              raid_level: 0  #defines the raid-level to create...0,1,5,6,etc.
+              slots:  #defines the slot(s) to use for creating the logic_deivce.
+                - 5
+            - name: ld4  #Bogus name for creating additional logic_devices
+              controller: 0  #Should usually be 0 unless more than one controller exists.
+              enclosure_id: 252  #enclosure id of enclose attached to controller
+              raid_level: 0  #defines the raid-level to create...0,1,5,6,etc.
+              slots:  #defines the slot(s) to use for creating the logic_deivce.
+                - 6
+            - name: ld5  #Bogus name for creating additional logic_devices
+              controller: 0  #Should usually be 0 unless more than one controller exists.
+              enclosure_id: 252  #enclosure id of enclose attached to controller
+              raid_level: 0  #defines the raid-level to create...0,1,5,6,etc.
+              slots:  #defines the slot(s) to use for creating the logic_deivce.
+                - 7
+            - name: ld6  #Bogus name for creating additional logic_devices
+              controller: 0  #Should usually be 0 unless more than one controller exists.
+              enclosure_id: 252  #enclosure id of enclose attached to controller
+              raid_level: 0  #defines the raid-level to create...0,1,5,6,etc.
+              slots:  #defines the slot(s) to use for creating the logic_deivce.
+                - 8
+        - megacli_create_logic_devices: true  #defines if script should be executed in order to create logic_device(s) defined
+        - megacli_reboot_after_creation: true
       roles:
-         - { role: username.rolename, x: 42 }
+         - role: ansible-lsi-megaraid
 
 License
 -------
@@ -35,4 +91,7 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Larry Smith Jr.
+- @mrlesmithjr
+- http://everythingshouldbevirtual.com
+- mrlesmithjr [at] gmail.com
