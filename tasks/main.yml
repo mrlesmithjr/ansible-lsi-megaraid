@@ -9,14 +9,6 @@
     mode: 0774
   when: ansible_os_family == "Debian"
 
-- name: creating lsi script
-  template:
-    src: lsi.sh.j2
-    dest: /usr/local/sbin/lsi.sh
-    owner: root
-    group: root
-    mode: 0774
-
 - name: generating logic device creation script
   template:
     src: lsi_create_ld.sh.j2
